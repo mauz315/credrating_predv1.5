@@ -54,7 +54,7 @@ def explain_tree(data, periods, ratings, model, train_set, sov_lab_encoder, le, 
         exp.show_in_notebook(show_table=True, show_all=False)
     
     #print(exp.available_labels())
-#    exp.save_to_file('explainer/lime_output.html')
+    exp.save_to_file('explainer/lime_output.html')
     
     if print_exp:
         av_lab = exp.available_labels()
