@@ -6,7 +6,7 @@ Created on Mon Sep 16 11:05:46 2019
 """
 
 import pandas as pd
-import joblib
+from sklearn.externals import joblib
 from rating_functions import rating_prediction
 from lime_explainer import explain_tree
 

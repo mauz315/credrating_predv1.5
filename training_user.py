@@ -64,7 +64,7 @@ del data_em["NA"]
 #    data_em = data_em[data_em.Ratio8 > qlow8]
 # inputs para las funciones de training
 remove_nan = True # Remover filas con datos faltantes.
-n_estimators = 500 # Número de árboles de entrenamiento
+n_estimators = 1000 # Número de árboles de entrenamiento
 min_samples_leaf = 2
 model_file = 'model/actual_rf_em.sav' # Modelo.
 sov_encoder_file = 'model/sov_lab_encoder_em.sav' # Encoder de rating soberano.
@@ -76,4 +76,4 @@ train_set = 'explainer/X_train_actual.sav' # training set, depende del modelo ut
 model_training(data_em, feat_key, le, remove_nan, output_test, 
                model_file, train_set, sov_encoder_file,
                n_estimators = n_estimators, min_samples_leaf = min_samples_leaf,
-               permut=False, shuffle_sample=False, conf_matrix = True)
+               permut=True, shuffle_sample=False, conf_matrix = True)

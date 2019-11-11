@@ -52,21 +52,16 @@ def explain_tree(data, periods, ratings, model, train_set, sov_lab_encoder, le, 
         print("Explicación para periodo " + str(per.loc[period].Periodo))
         exp = explainer.explain_instance(X_new[period], model.predict_proba, num_features=5, top_labels=ratings)
         exp.show_in_notebook(show_table=True, show_all=False)
-    
+        if print_exp:
+            av_lab = exp.available_labels()
+            for lab in av_lab:
+                print ('Explicación para rating %s' % class_names[lab])
+                display ('\n'.join(map(str, exp.as_list(label=lab))))
+                print ()
+
     #print(exp.available_labels())
     exp.save_to_file('explainer/lime_output.html')
     
-    if print_exp:
-        av_lab = exp.available_labels()
-        for lab in av_lab:
-            print ('Explanation for class %s' % class_names[lab])
-            print ('\n'.join(map(str, exp.as_list(label=lab))))
-            print ()
-#        
-#    exp_html = 'explainer/lime_output.html'
-#    webbrowser.open(exp_html,new=2)
-
-
 def output_guide(feat_key, data):
     
     import pandas as pd
@@ -74,8 +69,18 @@ def output_guide(feat_key, data):
     
     per = pd.DataFrame(list(data.columns), columns=["Periodo"]) 
     
+    dum = []
+    for i in list(feat_key.Key)[:-1]:
+        dum.append(int(i[5:]))
+    dum.append(999)
+    
+    feat_key["Srt"] = dum
+    feat_key = feat_key.sort_values(by=['Srt'])
+    feat_key = feat_key[['Key']]
+    print ()
     print ("Codificación ratios:")
     display (feat_key)
+#    display (feat_key['Key'])
     print ()
     print ("Número de periodo a explicar:")
     display (per)
