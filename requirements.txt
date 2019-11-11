@@ -3,4 +3,5 @@ scipy
 pandas
 scikit-learn
 hyperopt
-matplotliblime
+matplotlib
+lime
