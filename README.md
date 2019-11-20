@@ -1,2 +1,5 @@
-# credrating_predv1.5
-Clean, usable credit rating prediction repo
+# rating-crediticio-algorithm
+
+## Contenido
+
+Únicamente, almacenar archivos necesarios para que funcione este algoritmo.
