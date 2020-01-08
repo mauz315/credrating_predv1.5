@@ -87,5 +87,17 @@ def output_guide(feat_key, data):
     
     
     return (None)
+
+def output_guide2():
+    
+    from ipywidgets import interact
+    import pandas as pd
+           
+    def myfunc(Emisor):
+        return data.loc[Emisor]['ticker']
+    
+    data = pd.read_csv('data/ticker_list.csv', sep=',', index_col = 1, encoding = "latin1")
+    
+    interact(myfunc, Emisor=list(data.index))
     
     
