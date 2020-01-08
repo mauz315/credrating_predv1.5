@@ -7,12 +7,32 @@ Created on Mon Sep 16 15:43:18 2019
 
 # LIME explainer
 
-def explain_tree(data, periods, ratings, model, train_set, sov_lab_encoder, le, feat_key, print_exp):
+def explain_tree(data, periods, model, train_set, sov_lab_encoder, le, feat_key):
     
     import pandas as pd
     import numpy as np
     from lime import lime_tabular
-#    import webbrowser
+    from ipywidgets import widgets, interactive
+    from IPython.display import display, clear_output
+
+    def f(Variable):
+        return feat_key[feat_key['Key']==Variable].index[0]
+    
+    def on_button_clicked(b):
+        with output:
+            clear_output()
+            print(w.result)
+    
+    ratios = ['Ratio' + str(i+1) for i in range(0,26)]
+    ratios.append('SovereignRating')    
+    w = interactive(f, Variable=ratios)
+        
+    button = widgets.Button(description="Obtener nombre")
+    output = widgets.Output()
+    
+    display(w)        
+    display(button, output)
+    button.on_click(on_button_clicked)
     
     X_new = np.array(data.loc[feat_key.index].T)
     if sov_lab_encoder is not None:
@@ -48,9 +68,10 @@ def explain_tree(data, periods, ratings, model, train_set, sov_lab_encoder, le, 
     #                                                   categorical_names=feature_names_cat, kernel_width=3)
     # Explaining prediction with Lime
     per = pd.DataFrame(list(data.columns), columns=["Periodo"])
+    print_exp = False
     for period in periods:
         print("Explicación para periodo " + str(per.loc[period].Periodo))
-        exp = explainer.explain_instance(X_new[period], model.predict_proba, num_features=5, top_labels=ratings)
+        exp = explainer.explain_instance(X_new[period], model.predict_proba, num_features=5, top_labels=2)
         exp.show_in_notebook(show_table=True, show_all=False)
         if print_exp:
             av_lab = exp.available_labels()
@@ -60,44 +81,35 @@ def explain_tree(data, periods, ratings, model, train_set, sov_lab_encoder, le, 
                 print ()
 
     #print(exp.available_labels())
-    exp.save_to_file('explainer/lime_output.html')
+#    exp.save_to_file('explainer/lime_output.html')
     
-def output_guide(feat_key, data):
+def parametros(data):
     
-    import pandas as pd
-    import numpy as np
+    from ipywidgets import widgets
+    from IPython.display import display, clear_output
     
-    per = pd.DataFrame(list(data.columns), columns=["Periodo"]) 
+    def on_button_clicked(b):
+        with output:
+            clear_output()
+            per1n = str(list(data.columns).index(per1.value))
+            per2n = str(list(data.columns).index(per2.value))
+            print('Números de periodos:' + '[' + str(per1n) + ',' + str(per2n) + ']')
     
-    dum = []
-    for i in list(feat_key.Key)[:-1]:
-        dum.append(int(i[5:]))
-    dum.append(999)
+    button = widgets.Button(description="Obtener periodos")
+    output = widgets.Output()
+        
+    per1 = widgets.Dropdown(
+           options=list(data.columns),
+           description='Periodo 1:')
+    per2 = widgets.Dropdown(
+           options=list(data.columns),
+           description='Periodo 2:')
+   
+    box = widgets.VBox([per1, per2])
+    display(box)
+    display(button, output)
+    button.on_click(on_button_clicked)       
     
-    feat_key["Srt"] = dum
-    feat_key = feat_key.sort_values(by=['Srt'])
-    feat_key = feat_key[['Key']]
-    print ()
-    print ("Codificación ratios:")
-    display (feat_key)
-#    display (feat_key['Key'])
-    print ()
-    print ("Número de periodo a explicar:")
-    display (per)
-    
-    
-    return (None)
-
-def output_guide2():
-    
-    from ipywidgets import interact
-    import pandas as pd
-           
-    def myfunc(Emisor):
-        return data.loc[Emisor]['ticker']
-    
-    data = pd.read_csv('data/ticker_list.csv', sep=',', index_col = 1, encoding = "latin1")
-    
-    interact(myfunc, Emisor=list(data.index))
+#    interact(myfunc, Emisor=list(data.index))
     
     
