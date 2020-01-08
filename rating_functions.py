@@ -264,6 +264,7 @@ def rating_prediction(data, rf, feat_key, le, sov_lab_encoder, output_file):
 #        data = data.drop(rat2)
             
     # Importando nueva data:
+    data = pd.read_csv('input/' + data, sep=',', index_col = 0, encoding = "latin1")
     X_new = np.array(data.loc[feat_key.index].T)
 #    X_new_pure = np.array(data.loc[feat_key.index[(feat_key != 'SovereignRating')['Key']]].T)
 
@@ -301,5 +302,5 @@ def rating_prediction(data, rf, feat_key, le, sov_lab_encoder, output_file):
     print(data_pred[['Periodo', 'Rating Predicc', 'Rating Local Trad']])
 
     # Output file:
-    data_pred.to_csv(output_file, index = False)
+    data_pred.to_csv('output/' + output_file, index = False)
     return(None)
