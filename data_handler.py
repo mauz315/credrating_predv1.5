@@ -4,7 +4,6 @@ Created on Mon Nov 11 13:09:27 2019
 
 @author: P900017
 """
-from IPython.display import display
 
 #def View(df):
 #    css = """<style>
@@ -32,21 +31,33 @@ from IPython.display import display
     
 def issuer_choice():
     
-    from ipywidgets import interact
-#    from IPython.display import display
+    from ipywidgets import widgets
+    from IPython.display import display, clear_output
     import pandas as pd
-           
-    def myfunc(Emisor):
-        return data.loc[Emisor]['ticker']
-    
+
+#    def myfunc(issuer):
+#        return data.loc[issuer]['ticker']
+    def on_button_clicked(b):
+        ticker = data.loc[w.value]['ticker']
+        with output:
+            clear_output()
+            print('Ticker CIQ: ' + ticker)
+                    
     data = pd.read_csv('data/ticker_list.csv', sep=',', index_col = 1, encoding = "latin-1")
-    interact(myfunc, Emisor=list(data.index))
+    w = widgets.Dropdown(options=list(data.index), description='Emisor:')
+        
+    button = widgets.Button(description="Obtain CIQ")
+    output = widgets.Output()
+#    w.observe(on_button_clicked, names='value')
     
-def data_handler(data_file):
+    display(w)        
+    display(button, output)
+    button.on_click(on_button_clicked)
+    
+def data_handler(data_file, ticker):
     
     import pandas as pd
     import matplotlib.pyplot as plt
-    ticker = 'IQT303376018'
     data = pd.read_csv('data/'+ data_file, sep=',', index_col = ['Ticker'], encoding = "latin1")
     feat_key = pd.read_csv('data/features.csv', sep=',', index_col = ["Key"], encoding = "latin1")
     # pd.set_option('display.max_columns', 999)
