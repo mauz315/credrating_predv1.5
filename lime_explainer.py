@@ -83,19 +83,23 @@ def explain_tree(data, periods, model, train_set, sov_lab_encoder, le, feat_key)
     #print(exp.available_labels())
 #    exp.save_to_file('explainer/lime_output.html')
     
-def parametros(data):
+def explaining(data, rf, X_train, sov_lab_encoder, 
+                le, feat_key):
     
     from ipywidgets import widgets
-    from IPython.display import display, clear_output
+    from IPython.display import display, clear_output, Markdown
     
     def on_button_clicked(b):
         with output:
             clear_output()
-            per1n = str(list(data.columns).index(per1.value))
-            per2n = str(list(data.columns).index(per2.value))
-            print('Números de periodos:' + '[' + str(per1n) + ',' + str(per2n) + ']')
+            per1n = list(data.columns).index(per1.value)
+            per2n = list(data.columns).index(per2.value)
+#            print('Números de periodos:' + '[' + str(per1n) + ',' + str(per2n) + ']')
+            display(Markdown('Explicación de resultados:'))
+            explain_tree(data, [per1n,per2n], rf, X_train, sov_lab_encoder, le , feat_key)
+            
     
-    button = widgets.Button(description="Obtener periodos")
+    button = widgets.Button(description="Explicar trimestres escogidos")
     output = widgets.Output()
         
     per1 = widgets.Dropdown(
