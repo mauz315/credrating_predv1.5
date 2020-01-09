@@ -47,7 +47,7 @@ def explain_tree(data, periods, model, train_set, sov_lab_encoder, le, feat_key)
     
     # features_names = sum([feature_names_key], [])
     # print(features_names)
-    class_names = list(le.index)[0:-1]
+    class_names = list(le.index)[0:-2]
     class_names.reverse()
     feature_names = list(feat_key.Key) # Usar .index (nombres muy largos) o usar .Key (Ratio y #)
     # Create the the Lime explainer and the lambda function
