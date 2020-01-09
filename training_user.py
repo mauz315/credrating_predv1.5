@@ -16,7 +16,7 @@ feat_key = pd.read_csv('data/features.csv', sep=',', index_col = ["Feature"], en
 # Encoder para calificaciones:
 le = pd.read_csv('data/lab_encoder.csv', sep=',', index_col = 0, encoding = "latin1")
 # Datos de entrenamiento:
-data_em = pd.read_csv('data/data_em_1212_0119.csv', sep=',', index_col = ["Fecha", 'Ticker'], encoding = "latin1")
+data_em = pd.read_csv('data/data_em_1212_0619.csv', sep=',', index_col = ["Fecha", 'Ticker'], encoding = "latin1")
 
 ## Visualización de clases para mayor insight (histograma y estadisticos basicos)
 #print(data_em.describe())
