@@ -42,6 +42,10 @@ def issuer_choice(data_file):
         with output:
             clear_output()
             print('Ticker CIQ: ' + ticker)
+        clear_output()
+        display(w)        
+        display(button, output) #, output2)
+#        print('Ticker CIQ: ' + ticker)
         data_handler(data_file,ticker)
                     
     data = pd.read_csv('data/ticker_list.csv', sep=',', index_col = 1, encoding = "latin-1")
@@ -52,7 +56,7 @@ def issuer_choice(data_file):
 #    w.observe(on_button_clicked, names='value')
     
     display(w)        
-    display(button, output)
+    display(button, output) #, output2)
     button.on_click(on_button_clicked)
     
 def data_handler(data_file, ticker):
