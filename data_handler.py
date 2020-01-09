@@ -29,7 +29,7 @@ Created on Mon Nov 11 13:09:27 2019
 #    feat_key = feat_key[['Key']]
 #    return(feat_key)
     
-def issuer_choice():
+def issuer_choice(data_file):
     
     from ipywidgets import widgets
     from IPython.display import display, clear_output
@@ -42,11 +42,12 @@ def issuer_choice():
         with output:
             clear_output()
             print('Ticker CIQ: ' + ticker)
+        data_handler(data_file,ticker)
                     
     data = pd.read_csv('data/ticker_list.csv', sep=',', index_col = 1, encoding = "latin-1")
     w = widgets.Dropdown(options=list(data.index), description='Emisor:')
         
-    button = widgets.Button(description="Obtain CIQ")
+    button = widgets.Button(description="Obtener CIQ")
     output = widgets.Output()
 #    w.observe(on_button_clicked, names='value')
     
