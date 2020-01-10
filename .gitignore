@@ -5,7 +5,8 @@ __pycache__/
 
 # Archivos autogenerados
 
-#output/
+output/
+explainer/lime_output.html
 
 # C extensions
 *.so
