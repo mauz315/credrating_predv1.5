@@ -5,7 +5,6 @@ Created on Mon Sep 16 09:54:30 2019
 @author: P900017
 """
 import pandas as pd
-import numpy as np
 from rating_functions import model_training, feat_elim
 #import matplotlib.pyplot as plt
 
