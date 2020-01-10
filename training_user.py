@@ -73,7 +73,7 @@ remove_nan = True # Remover filas con datos faltantes.
 n_estimators = 1000 # Número de árboles de entrenamiento
 min_samples_leaf = 2
 model_file = 'model/actual_rf_em' + bank_suffix + '.sav' # Modelo.
-sov_encoder_file = 'model/sov_lab_encoder_em' + bank_suffix + '.sav' # Encoder de rating soberano.
+sov_encoder_file = 'model/sov_lab_encoder_em.sav' # Encoder de rating soberano.
 output_test = 'output/pred_test.csv' # Archivo de salida con prediciones.
 #LIME train set
 train_set = 'explainer/X_train_actual' + bank_suffix + '.sav' # training set, depende del modelo utilizado
