@@ -64,14 +64,14 @@ def data_handler(data_file, ticker):
     import pandas as pd
     import matplotlib.pyplot as plt
     data = pd.read_csv('data/'+ data_file, sep=',', index_col = ['Ticker'], encoding = "latin1")
-    feat_key = pd.read_csv('data/features.csv', sep=',', index_col = ["Key"], encoding = "latin1")
+    feat_key = pd.read_csv('data/features_banks.csv', sep=',', index_col = ["Key"], encoding = "latin1")
     # pd.set_option('display.max_columns', 999)
     # display (data.loc[ticker])
     cols = data.columns[1:-2]
     l = int(len(cols)/2)
     
     for i in range(0,l):
-        ratios = data[[cols[i], cols[i+13], 'Fecha']].loc[ticker]
+        ratios = data[[cols[i], cols[i+15], 'Fecha']].loc[ticker]
         ratios['Fecha'] = pd.to_datetime(ratios['Fecha'])
         fig, ax = plt.subplots()
         print(feat_key.loc[cols[i]].Feature)
