@@ -49,7 +49,7 @@ def model_training(data_em, feat_key, le, remove_nan, output_file,
 
     import numpy as np
     import pandas as pd
-    from sklearn.externals import joblib
+    import joblib
 #    import matplotlib.pyplot as plt
     from sklearn.model_selection import train_test_split
     from sklearn.model_selection import RandomizedSearchCV
