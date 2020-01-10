@@ -8,21 +8,13 @@ import pandas as pd
 from rating_functions import model_training, feat_elim
 #import matplotlib.pyplot as plt
 
-financials = True
-bank_suffix = ''
-train_data = 'data_em_1212_0619.csv'
-
-if financials == True:
-    bank_suffix = '_banks'
-    train_data = 'research_data_banks.csv'
-
 ## Cargando archivosy bases de datos necesarias
 # Rutas, nombres de ratios / nombres de ratios pure
-feat_key = pd.read_csv('data/features' + bank_suffix + '.csv', sep=',', index_col = ["Feature"], encoding = "latin1")
+feat_key = pd.read_csv('data/features_banks.csv', sep=',', index_col = ["Feature"], encoding = "latin1")
 # Encoder para calificaciones:
-le = pd.read_csv('data/lab_encoder' + bank_suffix + '.csv', sep=',', index_col = 0, encoding = "latin1")
+le = pd.read_csv('data/lab_encoder_banks.csv', sep=',', index_col = 0, encoding = "latin1")
 # Datos de entrenamiento:
-data_em = pd.read_csv('data/' + train_data, sep=',', index_col = ["Fecha", 'Ticker'], encoding = "latin1")
+data_em = pd.read_csv('data/research_data_banks.csv', sep=',', index_col = ["Fecha", 'Ticker'], encoding = "latin1")
 
 ## Visualización de clases para mayor insight (histograma y estadisticos basicos)
 #print(data_em.describe())
@@ -72,11 +64,11 @@ del data_em["NA"]
 remove_nan = True # Remover filas con datos faltantes.
 n_estimators = 1000 # Número de árboles de entrenamiento
 min_samples_leaf = 2
-model_file = 'model/actual_rf_em' + bank_suffix + '.sav' # Modelo.
+model_file = 'model/actual_rf_em_banks.sav' # Modelo.
 sov_encoder_file = 'model/sov_lab_encoder_em.sav' # Encoder de rating soberano.
 output_test = 'output/pred_test.csv' # Archivo de salida con prediciones.
 #LIME train set
-train_set = 'explainer/X_train_actual' + bank_suffix + '.sav' # training set, depende del modelo utilizado
+train_set = 'explainer/X_train_actual_banks.sav' # training set, depende del modelo utilizado
 
 # Training original de rating_functions
 model_training(data_em, feat_key, le, remove_nan, output_test, 
