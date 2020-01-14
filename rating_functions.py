@@ -304,3 +304,72 @@ def rating_prediction(data, rf, feat_key, le, sov_lab_encoder, output_file):
     # Output file:
     data_pred.to_csv('output/' + output_file, index = False)
     return(None)
+    
+def svm_training(data_em, feat_key, le, sov_encoder_file, remove_nan):
+    
+    import numpy as np
+    import joblib
+    import matplotlib.pyplot as plt
+    from sklearn.svm import SVC
+    from sklearn.preprocessing import LabelEncoder
+    
+    data_index = data_em.index # Se crea la variable data_index para publicar el output.
+    y_ = np.array(data_em.pop('IssuerRating'))
+    X_ = np.array(data_em[feat_key["Key"]])
+    
+    # Remove observations with no output
+    ind_valid_out = [is_string(yi) for yi in y_]
+    X = X_[ind_valid_out]
+    y = y_[ind_valid_out]
+    data_index = data_index[ind_valid_out]
+    
+    a = []
+    for yi in y_:
+        if is_string(yi):
+            a.append(le.loc[yi])
+        else:
+            float('NaN')
+    
+    y = np.array(a)
+    
+    # Encode Sovereign Rating
+    sr = feat_key[feat_key["Key"] == 'SovereignRating']
+    if len(sr)>0:
+        pos_sr = feat_key.index.get_loc(sr.index[0])# Position sovereign rating
+        pos_str = [is_string(x) for x in X[:,pos_sr]]
+        labels = np.unique(X[pos_str,pos_sr])
+#        labels = np.array(order_ratings(labels))
+        le_X = LabelEncoder()
+        le_X.fit(labels)
+        X[pos_str,pos_sr] = le_X.transform(X[pos_str,pos_sr])
+        joblib.dump(le_X, sov_encoder_file)# Save sovereign label encoder
+    
+    # Remove NaN
+    if remove_nan:
+        ind_not_na = [not np.isnan(np.sum(x)) for x in X]
+        X = X[ind_not_na]
+        y = y[ind_not_na]
+        data_index = data_index[ind_not_na]
+    
+    clf = SVC(gamma='auto')
+    clf.fit(X, y)
+    
+#    plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Paired, edgecolors='k')
+    plt.scatter(X[:, 0], X[:, 1], cmap=plt.cm.Paired, edgecolors='k')        
+    
+    ax = plt.gca()
+    xlim = ax.get_xlim()
+    ylim = ax.get_ylim()
+    
+    xx = np.linspace(xlim[0], xlim[1], 30)
+    yy = np.linspace(ylim[0], ylim[1], 30)
+    YY, XX = np.meshgrid(yy, xx)
+    xy = np.vstack([XX.ravel(), YY.ravel()]).T
+    
+    Z = clf.decision_function(xy).reshape(XX.shape)
+
+    # plot decision boundary and margins
+    a = ax.contour(XX, YY, Z, colors='k', levels=[0], alpha=0.5, linestyles=['-'])
+    
+    plt.show()
+    

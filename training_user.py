@@ -5,7 +5,7 @@ Created on Mon Sep 16 09:54:30 2019
 @author: P900017
 """
 import pandas as pd
-from rating_functions import model_training, feat_elim
+from rating_functions import model_training, feat_elim, svm_training
 #import matplotlib.pyplot as plt
 
 ## Cargando archivosy bases de datos necesarias
@@ -64,14 +64,18 @@ del data_em["NA"]
 remove_nan = True # Remover filas con datos faltantes.
 n_estimators = 1000 # Número de árboles de entrenamiento
 min_samples_leaf = 2
-model_file = 'model/actual_rf_em_banks.sav' # Modelo.
+model_file = 'model/actual_svm_em_banks.sav' # Modelo.
 sov_encoder_file = 'model/sov_lab_encoder_em.sav' # Encoder de rating soberano.
-output_test = 'output/pred_test.csv' # Archivo de salida con prediciones.
+output_test = 'output/pred_test_svm.csv' # Archivo de salida con prediciones.
 #LIME train set
 train_set = 'explainer/X_train_actual_banks.sav' # training set, depende del modelo utilizado
 
 # Training original de rating_functions
-model_training(data_em, feat_key, le, remove_nan, output_test, 
-               model_file, train_set, sov_encoder_file,
-               n_estimators = n_estimators, min_samples_leaf = min_samples_leaf,
-               permut=True, shuffle_sample=False, conf_matrix = True)
+#model_training(data_em, feat_key, le, remove_nan, output_test, 
+#               model_file, train_set, sov_encoder_file,
+#               n_estimators = n_estimators, min_samples_leaf = min_samples_leaf,
+#               permut=True, shuffle_sample=False, conf_matrix = True)
+
+svm_training(data_em, feat_key, le, sov_encoder_file, remove_nan)
+
+
