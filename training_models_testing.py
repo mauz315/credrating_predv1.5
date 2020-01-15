@@ -13,6 +13,11 @@ import joblib
 import matplotlib.pyplot as plt
 from sklearn.svm import SVC
 from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
 
 def is_string(s):
     try:
@@ -83,8 +88,44 @@ if remove_nan:
 
 y = np.ravel(y)
 
-clf = SVC(gamma='auto', decision_function_shape='ovo')
+# Train and test samples:
+perc_train_size = 0.8
+train_size = int(X.shape[0] * perc_train_size)
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = train_size, shuffle=True)
+
+#param_grid = [{'C': list(range(1:20)), 'gamma': ['auto'], 'kernel': ['rbf']},]
+
+print('Tamaño de la muestra de entrenamiento: ' + str(np.shape(X_train)[0]))
+print('Tamaño de la muestra de testing: ' + str(np.shape(X_test)[0]))
+
+#score = 'precision'
+clf = SVC(gamma= 'auto', kernel='poly', probability=True)
+#clf = GridSearchCV(SVC(), param_grid, scoring='%s_macro' % score)
 clf.fit(X, y)
+
+#print("Best parameters set found on development set:")
+#print()
+#print(clf.best_params_)
+#print()
+#print("Grid scores on development set:")
+#print()
+#means = clf.cv_results_['mean_test_score']
+#stds = clf.cv_results_['std_test_score']
+#for mean, std, params in zip(means, stds, clf.cv_results_['params']):
+#    print("%0.3f (+/-%0.03f) for %r"
+#          % (mean, std * 2, params))
+#print()
+#Kernel results so far:
+# rbf: Train = .78      Test = .72
+# poly:Train = .94      Test = .94
+
+#Gamma --> higher leads to overfitting
+#C --> penalty: higher leads to overfitting
+#degree --> polynomial degree, = 1 means linear.
+
+#Degree results so far:
+#degree = 3 is default, degree = 4 led to 1.0 score on training, 0.995 on testing
+
 
 joblib.dump(clf, model_file)
 
@@ -98,13 +139,47 @@ ylim = ax.get_ylim()
 
 xx = np.linspace(xlim[0], xlim[1], 30)
 yy = np.linspace(ylim[0], ylim[1], 30)
-YY, XX = np.meshgrid(yy, xx)
-xy = np.vstack([XX.ravel(), YY.ravel()]).T
-
-Z = clf.decision_function(xy).reshape(XX.shape)
-
-# plot decision boundary and margins
-a = ax.contour(XX, YY, Z, colors='k', levels=[0], alpha=0.5, linestyles=['-'])
+#YY, XX = np.meshgrid(yy, xx)
+#xy = np.vstack([XX.ravel(), YY.ravel()]).T
+#
+#Z = clf.decision_function(xy).reshape(XX.shape)
+#
+## plot decision boundary and margins
+#a = ax.contour(XX, YY, Z, colors='k', levels=[0], alpha=0.5, linestyles=['-'])
 
 plt.show()
+
+# Prediction files por training and test sets
+pred_train = clf.predict(X_train)
+pred_test = clf.predict(X_test)
+#pred_o = clf.predict(X_o)
+
+print('Train Accuracy:', metrics.accuracy_score(y_train, pred_train))
+print('Test Accuracy:', metrics.accuracy_score(y_test, pred_test))
+#print('Original Set Accuracy:', metrics.accuracy_score(y_o, pred_o))
+print(classification_report(y_test, pred_test))
+
+mse_train = metrics.mean_squared_error(y_train, pred_train)
+mse_test = metrics.mean_squared_error(y_test, pred_test)
+print("Train MSE: {}".format(mse_train))
+print("Test MSE: {}".format(mse_test))
+
+#Confusion matrix of test data 
+conf_matrix = False
+if conf_matrix:
+    conf_mat = confusion_matrix(y_test, pred_test)
+    print(conf_mat)
+
+# output file:
+
+pred_calif = np.array([le.iloc[x == list(le.iloc[:,0]),0].index[0] for x in clf.predict(X_test)])
+y_test_calif = np.array([le.iloc[x == list(le.iloc[:,0]),0].index[0] for x in y_test])
+
+if len(sr)>0:
+    X_test[:, pos_sr] = le_X.inverse_transform(X_test[:, pos_sr].astype('int')) # Inverse transform of sov. ratingsS
+
+
+# Testing for sovereign rating dependency
+
+
 
