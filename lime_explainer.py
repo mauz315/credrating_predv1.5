@@ -52,12 +52,12 @@ def explain_tree(data, periods, model, train_set, sov_lab_encoder, le, feat_key)
     feature_names = list(feat_key.Key) # Usar .index (nombres muy largos) o usar .Key (Ratio y #)
     # Create the the Lime explainer and the lambda function
     categorical_names = {}
-    categorical_names[26] = sov_lab_encoder.classes_
+    categorical_names[30] = sov_lab_encoder.classes_
     
     explainer = lime_tabular.LimeTabularExplainer(train_set, mode='classification',
                                                   feature_names=feature_names,
                                                   class_names=class_names,
-                                                  categorical_features=[26],
+                                                  categorical_features=[30],
                                                   categorical_names=categorical_names,
                                                   discretize_continuous=True)
     

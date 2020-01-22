@@ -366,10 +366,10 @@ def svm_training(data_em, feat_key, le, sov_encoder_file, remove_nan):
     YY, XX = np.meshgrid(yy, xx)
     xy = np.vstack([XX.ravel(), YY.ravel()]).T
     
-    Z = clf.decision_function(xy).reshape(XX.shape)
+#    Z = clf.decision_function(xy).reshape(XX.shape)
 
     # plot decision boundary and margins
-    a = ax.contour(XX, YY, Z, colors='k', levels=[0], alpha=0.5, linestyles=['-'])
+#    a = ax.contour(XX, YY, Z, colors='k', levels=[0], alpha=0.5, linestyles=['-'])
     
     plt.show()
     
