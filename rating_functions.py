@@ -53,7 +53,7 @@ def model_training(data_em, feat_key, le, remove_nan, output_file,
 #    import matplotlib.pyplot as plt
     from sklearn.model_selection import train_test_split
     from sklearn.model_selection import RandomizedSearchCV
-    from sklearn.preprocessing import Imputer
+    # from sklearn.preprocessing import Imputer
     from sklearn.preprocessing import OneHotEncoder
     from sklearn.preprocessing import LabelEncoder
     from sklearn.preprocessing import RobustScaler
